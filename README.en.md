@@ -1,20 +1,21 @@
 <!-- [日本語](README.md) | English -->
 
-# voicein — Japanese voice input for Linux (push-to-talk)
+# voicein — Linux voice input (just register an API key / push-to-talk)
 
-A nearly keyboard-free Japanese voice input tool for Linux (Wayland / GNOME / Ubuntu).
+**A voice input tool for Linux that works with nothing but an OpenAI API key.**
+Speak, and the text goes straight into whatever app you have open — almost no keyboard needed.
 
-- **Record while a key is held** (push-to-talk). Press a key, speak, release.
-- Transcribes with OpenAI **`gpt-4o-transcribe`** (great Japanese, natural punctuation).
-- Pastes the result into **whatever app is focused** (Claude / browser / terminal …) at the cursor.
+- **Record while a key is held** (push-to-talk). Press, speak, release.
+- Transcribes with OpenAI (`gpt-4o-transcribe`). Works great in **Japanese and any other
+  language** (set `language` in `config.ini`).
+- Pastes the result into the **focused app** (Claude / browser / terminal …) at the cursor.
 - A **history viewer** (GUI) to list, search, and copy past transcriptions with one click.
+
+No local models, no fiddly setup. **Register one API key and it runs.**
 
 How it works: recording via `parecord`, transcription via the OpenAI API, injection via
 "copy to clipboard → send a paste keystroke from a virtual keyboard (`evdev`/`uinput`)".
-This reliably inserts Japanese (and any Unicode) text into any app.
-
-> The UI and messages are in Japanese, but the tool itself works with any transcription
-> language — set `language` in `config.ini`.
+Works on both Wayland and X11.
 
 ---
 
@@ -41,7 +42,7 @@ Then set your OpenAI API key in `config.ini`:
 api_key = sk-...
 ```
 
-(or the `OPENAI_API_KEY` environment variable)
+(or the `OPENAI_API_KEY` environment variable). **That's the only configuration needed.**
 
 ---
 
@@ -60,7 +61,7 @@ api_key = sk-...
 | Right Shift | `Ctrl+Shift+V` | terminals |
 
 Hold the key to record; release to transcribe and paste. Start/done are signaled by sounds.
-A short **`press_delay`** (default 0.15s) prevents accidental taps from triggering. Tune keys,
+A short **`press_delay`** (default 0.15s) keeps accidental taps from firing. Tune keys,
 paste methods, and the delay in `config.ini`.
 
 ### Helper commands
@@ -91,7 +92,7 @@ journalctl --user -u voicein -f   # logs
 |------|------|
 | `api_key` | OpenAI API key (falls back to `OPENAI_API_KEY`) |
 | `model` | `gpt-4o-transcribe` (default) / `gpt-4o-mini-transcribe` (cheaper) / `whisper-1` |
-| `language` | recognition language (default `ja`) |
+| `language` | recognition language (default `ja`; set `en` etc. for others) |
 | `prompt` | hint text; list proper nouns / jargon to improve accuracy |
 | `mic_source` | which mic to use (see `./run.sh mics`) |
 | `sounds` / `notify` | enable sound effects / notifications |

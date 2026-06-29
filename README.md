@@ -1,24 +1,27 @@
 <!-- 日本語 | [English](README.en.md) -->
 
-# voicein — Linux 日本語 音声入力(プッシュトゥトーク)
+# voicein — Linux 音声入力(APIキー登録だけで使える / プッシュトゥトーク)
 
-Wayland/GNOME(Ubuntu)向けの、ほぼキーボードを使わない日本語音声入力ツール。
+**LinuxでOpenAIのAPIキーを登録するだけで使える、音声入力ツール。**
+ほぼキーボードを使わずに喋った内容を、いま開いているアプリへそのまま入力できます。
 
-- **押している間だけ録音**(プッシュトゥトーク)。指定キーを押す→話す→離すだけ。
-- **OpenAI `gpt-4o-transcribe`** で日本語に変換(句読点も自然)。
-- 変換結果を **今フォーカスしているアプリ**(Claude / ブラウザ / ターミナル等)の
-  カーソル位置へ自動で貼り付け。
-- **変換履歴ビューア**(GUI)で一覧表示・検索・ワンクリックでコピー。
+- 指定キーを **押している間だけ録音**(プッシュトゥトーク)→ 離すと変換
+- OpenAI の音声認識(`gpt-4o-transcribe`)で変換。**日本語もそのまま高精度**(`language`設定で他言語もOK)
+- 変換結果を **いま開いているアプリ**(Claude / ブラウザ / ターミナルなど)のカーソル位置へ自動で貼り付け
+- 変換履歴を **一覧表示・検索・ワンクリックでコピー** できるGUI付き
+
+ローカルにモデルを置いたり面倒なセットアップは不要。**APIキーを1つ登録すれば動きます。**
 
 仕組み: 録音は `parecord`、認識は OpenAI API、注入は「クリップボードへコピー →
-仮想キーボード(`evdev`/`uinput`)で貼り付けキー送出」。日本語をそのまま確実に入れられます。
+仮想キーボード(`evdev`/`uinput`)で貼り付けキー送出」。Wayland / X11 どちらでも動きます。
 
 ---
 
 ## セットアップ
 
 ```bash
-cd ~/dev/voice
+git clone https://github.com/usar00/voicein.git
+cd voicein
 bash install.sh
 ```
 
@@ -37,7 +40,7 @@ bash install.sh
 api_key = sk-...
 ```
 
-(環境変数 `OPENAI_API_KEY` でも可)
+(環境変数 `OPENAI_API_KEY` でも可)。**設定はこれだけ。**
 
 ---
 
@@ -87,7 +90,7 @@ journalctl --user -u voicein -f   # ログ確認
 |------|------|
 | `api_key` | OpenAI APIキー(空なら `OPENAI_API_KEY`) |
 | `model` | `gpt-4o-transcribe`(既定)/ `gpt-4o-mini-transcribe`(安価)/ `whisper-1` |
-| `language` | 認識言語(既定 `ja`) |
+| `language` | 認識言語(既定 `ja`。`en` などにすれば他言語) |
 | `prompt` | 認識ヒント。固有名詞・専門用語を書くと精度向上 |
 | `mic_source` | 使うマイク(`./run.sh mics` で確認) |
 | `sounds` / `notify` | 効果音 / 通知の有無 |
@@ -97,16 +100,25 @@ journalctl --user -u voicein -f   # ログ確認
 
 ---
 
+## 動作環境
+
+- Linux(**Wayland / GNOME / Ubuntu** で開発・確認。X11でも動く設計)
+- 音声: PulseAudio または PipeWire(`parecord`)
+- OpenAI APIキー(従量課金。`gpt-4o-transcribe` で約$0.006/分)
+
+他ディストロでもパッケージ名を読み替えればだいたい動きます。
+
+> OpenAIは前払い式なので事前にクレジット購入が必要です。なお **JCBカードは弾かれる**ことが
+> 多いので、決済に失敗したら Visa / Mastercard(デビット可)を使ってください。
+
 ## トラブルシューティング
 
-- **`input` グループに入っているか確認**: `groups | grep input`。無ければ再ログイン。
+- **`input` グループ確認**: `groups | grep input`。無ければ再ログイン。
 - **キーが検出されない**: `./run.sh keys` でデバイスが見えるか確認。見えなければ権限不足。
-- **ターミナルに貼れない**: ターミナルの貼り付けは `Ctrl+Shift+V`。右Shiftで話すか、
-  `config.ini` の割り当てを変更。
+- **ターミナルに貼れない**: ターミナルの貼り付けは `Ctrl+Shift+V`。右Shiftで話すか割り当て変更。
 - **別キーにしたい**: `./run.sh keys` 末尾のキー名(例 `KEY_SCROLLLOCK`, `KEY_F12`)を
   `[bindings]` に設定。フットペダル(USB HID)も同様に対応可能。
-- **認識が遅い/失敗**: ネットワークと APIキー残高を確認。`gpt-4o-mini-transcribe` も選択可。
 
-## 履歴の保存場所
+## ライセンス
 
-`data/history.jsonl`(1行1件のJSON)。GUI から検索・コピーできます。
+MIT。使いたい人は勝手にどうぞ。

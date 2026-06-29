@@ -1,0 +1,14 @@
+[Unit]
+Description=voicein 日本語音声入力デーモン
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/dev/voice
+ExecStart=%h/dev/voice/.venv/bin/python -m voicein
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target

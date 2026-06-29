@@ -7,6 +7,7 @@ Hold a key, speak, release — the text lands in whatever app you have open
 to configure is a single API key. Works in Japanese and other languages.
 
 [**View on GitHub →**](https://github.com/usar00/voicein){: .btn }
+[**紹介記事（日本語）→**](article-ja.md){: .btn }
 
 ---
 

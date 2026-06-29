@@ -59,6 +59,8 @@ class App:
             self.bindings[code] = combo
         self._busy = False
         self._active_key: int | None = None
+        self._state = "idle"  # idle / pending(溜め中) / recording
+        self._pending_start: asyncio.Task | None = None
 
     async def _read_device(self, dev: evdev.InputDevice) -> None:
         async for event in dev.async_read_loop():
@@ -73,16 +75,40 @@ class App:
                 await self._on_release(event.code)
 
     async def _on_press(self, code: int) -> None:
-        if self._busy or self.recorder.recording:
+        if self._busy or self._state != "idle":
             return
         self._active_key = code
+        self._state = "pending"
+        # 「溜め」: キーを press_delay 秒以上押し続けたら録音開始。
+        # それより短い誤タップでは録音も効果音も発生しない。
+        self._pending_start = asyncio.create_task(self._delayed_start())
+
+    async def _delayed_start(self) -> None:
+        try:
+            await asyncio.sleep(self.cfg.press_delay)
+        except asyncio.CancelledError:
+            return
+        self._state = "recording"  # ここを過ぎたら確定で録音
         await self.recorder.start()
         self.fb.sound("start")
 
     async def _on_release(self, code: int) -> None:
-        if code != self._active_key or not self.recorder.recording:
+        if code != self._active_key:
             return
+        if self._state == "pending":
+            # 溜めの途中で離した = 短すぎる誤タップ。録音も音も出さず無視。
+            if self._pending_start is not None:
+                self._pending_start.cancel()
+            self._pending_start = None
+            self._active_key = None
+            self._state = "idle"
+            return
+        if self._state != "recording":
+            self._active_key = None
+            return
+        self._pending_start = None
         self._active_key = None
+        self._state = "idle"
         path, duration = await self.recorder.stop()
         if path is None or duration < self.cfg.min_seconds:
             self.fb.sound("error")

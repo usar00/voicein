@@ -1,3 +1,5 @@
+<!-- 日本語 | [English](README.en.md) -->
+
 # voicein — Linux 日本語 音声入力(プッシュトゥトーク)
 
 Wayland/GNOME(Ubuntu)向けの、ほぼキーボードを使わない日本語音声入力ツール。
@@ -54,7 +56,8 @@ api_key = sk-...
 | 右Shift | `Ctrl+Shift+V` | ターミナル |
 
 押している間だけ録音し、離すと変換→貼り付けします。録音開始/完了は効果音で分かります。
-キーや貼り付け方法は `config.ini` の `[bindings]` で変更できます。
+短い誤タップで反応しないよう、押し始めに **`press_delay`(既定0.15秒)の「溜め」** があります。
+キーや貼り付け方法・溜めの長さは `config.ini` で変更できます。
 
 ### 補助コマンド
 
@@ -89,6 +92,7 @@ journalctl --user -u voicein -f   # ログ確認
 | `mic_source` | 使うマイク(`./run.sh mics` で確認) |
 | `sounds` / `notify` | 効果音 / 通知の有無 |
 | `max_seconds` / `min_seconds` | 録音の最大/最小秒数 |
+| `press_delay` | この秒数キーを押し続けてから録音開始(誤タップ・即ピコ防止。既定0.15) |
 | `[bindings]` | PTTキー → 貼り付け方法 の対応 |
 
 ---

@@ -26,6 +26,7 @@ class Config:
     notify: bool = True
     max_seconds: int = 60
     min_seconds: float = 0.3
+    press_delay: float = 0.15  # この秒数キーを押し続けてから録音開始(誤タップ防止の「溜め」)
     # PTTキー名(evdev) -> 貼り付けキー組み合わせ
     bindings: dict[str, str] = field(default_factory=lambda: {
         "KEY_RIGHTCTRL": "ctrl+v",        # 通常のアプリ(Claude / ブラウザ / 入力欄)
@@ -57,6 +58,7 @@ def load() -> Config:
             cfg.notify = s.getboolean("notify", cfg.notify)
             cfg.max_seconds = s.getint("max_seconds", cfg.max_seconds)
             cfg.min_seconds = s.getfloat("min_seconds", cfg.min_seconds)
+            cfg.press_delay = s.getfloat("press_delay", cfg.press_delay)
         if parser.has_section("bindings"):
             cfg.bindings = {k.upper(): v.strip() for k, v in parser["bindings"].items()}
     # APIキーは環境変数を優先フォールバック

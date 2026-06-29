@@ -31,8 +31,8 @@ Then hold **Right Ctrl**, speak, release. That's it.
 
 ## Docs
 
-- [README (English)](README.en.md)
-- [README (日本語)](README.md)
+- [README (English)](https://github.com/usar00/voicein/blob/master/README.en.md)
+- [README (日本語)](https://github.com/usar00/voicein/blob/master/README.md)
 - License: **MIT** — use it however you like.
 
 ---

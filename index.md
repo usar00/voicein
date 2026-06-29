@@ -3,8 +3,8 @@
 **Linux voice input that runs on just an OpenAI API key.**
 
 Hold a key, speak, release — the text lands in whatever app you have open
-(Claude, your browser, a terminal…). No local models, no fiddly setup.
-Register one API key and it works. Works in Japanese and any other language.
+(Claude, your browser, a terminal…). No local models to host; the main thing
+to configure is a single API key. Works in Japanese and other languages.
 
 [**View on GitHub →**](https://github.com/usar00/voicein){: .btn }
 
@@ -13,7 +13,7 @@ Register one API key and it works. Works in Japanese and any other language.
 ## What it does
 
 - **Push-to-talk**: record only while a key is held; release to transcribe.
-- **OpenAI `gpt-4o-transcribe`**: natural punctuation, great Japanese, any language.
+- **OpenAI `gpt-4o-transcribe`**: natural punctuation, works well in Japanese and other languages.
 - **Pastes at the cursor** of the focused app via a virtual keyboard — Wayland & X11.
 - **History viewer (GUI)**: list, search, and copy past transcriptions in one click.
 

@@ -6,12 +6,12 @@
 Speak, and the text goes straight into whatever app you have open — almost no keyboard needed.
 
 - **Record while a key is held** (push-to-talk). Press, speak, release.
-- Transcribes with OpenAI (`gpt-4o-transcribe`). Works great in **Japanese and any other
-  language** (set `language` in `config.ini`).
+- Transcribes with OpenAI (`gpt-4o-transcribe`). Works well in Japanese and other languages
+  (set `language` in `config.ini`). Proper nouns are sometimes missed, but a `prompt` hint helps.
 - Pastes the result into the **focused app** (Claude / browser / terminal …) at the cursor.
 - A **history viewer** (GUI) to list, search, and copy past transcriptions with one click.
 
-No local models, no fiddly setup. **Register one API key and it runs.**
+No local models to host. The main thing to configure is a single API key.
 
 How it works: recording via `parecord`, transcription via the OpenAI API, injection via
 "copy to clipboard → send a paste keystroke from a virtual keyboard (`evdev`/`uinput`)".

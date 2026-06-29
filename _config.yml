@@ -1,0 +1,4 @@
+theme: jekyll-theme-cayman
+title: voicein
+description: Linux voice input that runs on just an OpenAI API key — push-to-talk, pastes into any app.
+show_downloads: false
